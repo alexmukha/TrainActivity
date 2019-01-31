@@ -9,3 +9,29 @@
       };
 
       firebase.initializeApp(config);
+      var database = firebase.database();
+      var today = moment();
+      console.log(today);
+    
+      $("#submit").on("click", function() {
+        console.log("Clicked");
+        var name = $("#trainNameInput").val().trim();
+        var destin = $("#destinationInput").val().trim();
+        var start = $("#timeInput").val().trim();
+        var freq = $("#frequencyInput").val().trim();
+
+
+        // var today = moment();
+    // var month = today.diff(moment(start, "MM/DD/YYYY"), "month");
+    // var $key = database.key;
+
+    database.ref().push({
+        Train: {
+        name: name,
+        destin: destin,
+        start: start,
+        freq: freq
+        }
+         });
+        
+    });
