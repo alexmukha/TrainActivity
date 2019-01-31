@@ -35,3 +35,25 @@
          });
         
     });
+
+    database.ref().on("child_added", function(snapshot) {
+    
+        // Decaring a var vs to hold an object
+        var vs = snapshot.val();
+
+        console.log(vs.start);
+    
+        console.log(database.ref());
+        console.log(snapshot.key, snapshot.val());
+        var startTime = vs.start;
+        var timeS = moment(startTime, "HH:mm").subtract(1, "years");
+        console.log(timeS);
+        console.log(vs.dateAdded);
+        var $row = $("<tr>");
+        $row.append("<td>"+vs.name+"</td>");
+        $row.append("<td>"+vs.destin+"</td>");
+        $row.append("<td>"+vs.freq+"</td>");
+        $row.append("<td>"+vs.start+"</td>");
+        $("#train-table-rows").append($row);
+     
+    })
