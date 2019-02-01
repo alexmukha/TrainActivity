@@ -9,6 +9,7 @@
       };
 
       firebase.initializeApp(config);
+
       var database = firebase.database();
       var today = moment();
       console.log(today);
@@ -20,11 +21,19 @@
         var start = $("#timeInput").val().trim();
         var freq = $("#frequencyInput").val().trim();
 
-
-        // var today = moment();
+    // var today = moment();
     // var month = today.diff(moment(start, "MM/DD/YYYY"), "month");
     // var $key = database.key;
+    var postsRef = database.ref().child("Trains");
+  
+    postsRef.push().set({
+    name: name,
+    destin: destin,
+    start: start,
+    freq: freq
+});
 
+    /*
     database.ref().push({
         Train: {
         name: name,
@@ -33,8 +42,11 @@
         freq: freq
         }
          });
-        
+         */
     });
+
+
+    
 
     database.ref().on("child_added", function(snapshot) {
     
