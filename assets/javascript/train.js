@@ -46,21 +46,26 @@
     });
 
 
-    
 
-    database.ref().on("child_added", function(snapshot) {
+
+    database.ref().child("Trains").on("child_added", function(snapshot) {
     
         // Decaring a var vs to hold an object
         var vs = snapshot.val();
-
+        // var vs = ss.val();
+        // var ks = snapshot.key;
+        // var vs = snapshot.key.val();
         console.log(vs.start);
     
-        console.log(database.ref());
-        console.log(snapshot.key, snapshot.val());
+        // console.log(database.ref().database.ref());
+        // console.log(snapshot.key, snapshot.val());
+        // var timeS = moment.unix(vs.start).format("YYYY-MM-DD");
+        // var timeS = moment.unix(vs.start).format("HH:mm");
         var startTime = vs.start;
-        var timeS = moment(startTime, "HH:mm").subtract(1, "years");
-        console.log(timeS);
-        console.log(vs.dateAdded);
+        // var timeS = moment(startTime, "HH:mm").subtract(1, "years");
+        // console.log(startTime);
+        // console.log(timeS);
+        // console.log(vs.dateAdded);
         var $row = $("<tr>");
         $row.append("<td>"+vs.name+"</td>");
         $row.append("<td>"+vs.destin+"</td>");
