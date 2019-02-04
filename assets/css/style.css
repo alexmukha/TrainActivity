@@ -1,0 +1,23 @@
+body {
+    background-image: url("../../assets/images/HSTrainStation.jpg");
+    height: 100vh;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-attachment: fixed;
+}
+
+.op1 {
+    opacity: 1;
+}
+
+.op8 {
+    opacity: .9;
+}
+
+.jumbo {
+    /* background-image: url("../../assets/images/HSTrainStation.jpg"); */
+    /* background-position: bottom; */
+    background-color: blue;
+    color: white;
+}
