@@ -7,69 +7,63 @@
         storageBucket: "amfirebase-2e1f3.appspot.com",
         messagingSenderId: "153473692758"
       };
-
       firebase.initializeApp(config);
-
       var database = firebase.database();
-      var today = moment();
-    //   console.log(today);
-    
+
+      var currentTime = moment();
+    //   var nowTime = moment(moment()).format("HH:mm");
+    var timeIs = moment(currentTime).format("hh:mm");
+    console.log(timeIs);
+
+      var nhrs12 = moment(currentTime).format("hh");
+      var nhrs24 = moment(currentTime).format("HH");
+      console.log("HRS are "+nhrs12+" and "+nhrs24);
+      if (nhrs12 === nhrs24) {
+          var ntd = "AM";
+      } else {
+          var ntd = "PM"
+      }
+      $("#timenow").append("<b>Current time is "+timeIs+" "+ntd+"</b>");
+
+      // ON.Click function to add a new train
       $("#submit").on("click", function() {
-        // console.log("Clicked");
         var name = $("#trainNameInput").val().trim();
         var destin = $("#destinationInput").val().trim();
         var start = $("#timeInput").val().trim();
         var freq = $("#frequencyInput").val().trim();
 
-    // var today = moment();
-    // var month = today.diff(moment(start, "MM/DD/YYYY"), "month");
-    // var $key = database.key;
-    var postsRef = database.ref().child("Trains");
-  
-    postsRef.push().set({
+    // Push data into a "Train" database
+    var dbRef = database.ref().child("Trains");
+    dbRef.push().set({
     name: name,
     destin: destin,
     start: start,
     freq: freq
 });
-
-    /*
-    database.ref().push({
-        Train: {
-        name: name,
-        destin: destin,
-        start: start,
-        freq: freq
-        }
-         });
-         */
-    });
+});
 
 
 
-
+    // Pull data from "Train" database
     database.ref().child("Trains").on("child_added", function(snapshot) {
-    
-        // Decaring a var vs to hold an object
-        var vs = snapshot.val();
+            // Decaring a var db to hold an object
+        var db = snapshot.val();
 
         // Time each train starts
-        var startTime = vs.start;
-        var frequency = vs.freq;
+        var startTime = db.start;
+        var frequency = db.freq;
+
         console.log("=========================");
-
-
-        console.log(vs.name+" train starts at "+startTime);
+        console.log(db.name+" train starts at "+startTime);
        
     
         // First Time (pushed back 1 year to make sure it comes before current time)
         var startTimeFormat = moment(startTime, "HH:mm").subtract(1, "years");
-        console.log(startTimeFormat._i);
 
         // Current Time
-        var currentTime = moment();
-        console.log(moment(currentTime).format("hh:mm"));
-
+        // console.log(currentTime);
+        // console.log("Now is "+moment(currentTime).format("hh:mm"));
+      
         //  Find difference between now and statTime
         var timeDiff = moment().diff(moment(startTimeFormat), "minutes");
         console.log("Diff " + timeDiff+" min");
@@ -85,27 +79,25 @@
         // Next train 
         var nextTrain = moment().add(minTill, "minutes");
         var nextTime = moment(nextTrain).format("hh:mm");
+        var hrs12 = moment(nextTrain).format("hh");
+        var hrs24 = moment(nextTrain).format("HH");
+        console.log("HRS are "+hrs12+" and "+hrs24);
+        if (hrs12 === hrs24) {
+            var dt = "AM";
+        } else {
+            var dt = "PM"
+        }
+
+
+
+
         console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
-        // var vs = ss.val();
-        // var ks = snapshot.key;
-        // var vs = snapshot.key.val();
-        // console.log(vs.start);
-    
-        // console.log(database.ref().database.ref());
-        // console.log(snapshot.key, snapshot.val());
-        // var timeS = moment.unix(vs.start).format("YYYY-MM-DD");
-        // var timeS = moment.unix(vs.start).format("HH:mm");
-        // var startTime = vs.start;
-        // var timeS = moment(startTime, "HH:mm").subtract(1, "years");
-        // console.log(timeS);
-        // console.log(vs.dateAdded);
         var $row = $("<tr>");
-        $row.append("<td>"+vs.name+"</td>");
-        $row.append("<td>"+vs.destin+"</td>");
-        $row.append("<td>"+vs.freq+"</td>");
-        $row.append("<td>"+nextTime+"</td>");
-        $row.append("<td>"+minTill+"</td>");
+        $row.append("<td>"+db.name+"</td>");
+        $row.append("<td>"+db.destin+"</td>");
+        $row.append("<td class=\"text-center\">"+db.freq+"</td>");
+        $row.append("<td class=\"text-center\">"+nextTime+" "+dt+"</td>");
+        $row.append("<td class=\"text-center\">"+minTill+"</td>");
         $("#train-table-rows").append($row);
-     
     })
